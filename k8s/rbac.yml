@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name:  resource-manager
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: resource-manager-role
+rules:
+  - apiGroups: [""]
+    resources: ["pods", "services"]
+    verbs: ["create", "get", "list", "watch", "delete"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata: 
+  name: resource-manager-rolebinding
+subjects:
+  - kind: ServiceAccount
+    name: resource-manager
+    namespace: default
+roleRef:
+  kind: Role
+  name: resource-manager-role
+  apiGroup: rbac.authorization.k8s.io
