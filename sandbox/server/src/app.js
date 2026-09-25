@@ -36,7 +36,8 @@ app.post('/api/sandbox/start', async (req, res)=>{
     return res.status(201).json({
         message:'sandbox environment created successfully',
         sandboxId,
-        previewUrl: `http://${sandboxId}.preview.localhost`
+        previewUrl: `http://${sandboxId}.preview.127.0.0.1.nip.io`,
+        agentUrl: `http://${sandboxId}.agent.127.0.0.1.nip.io`
 
     })
 })
