@@ -16,11 +16,11 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata: 
   name: resource-manager-rolebinding
-subjects:
-  - kind: ServiceAccount
-    name: resource-manager
-    namespace: default
 roleRef:
   kind: Role
   name: resource-manager-role
   apiGroup: rbac.authorization.k8s.io
+subjects:
+  - kind: ServiceAccount
+    name: resource-manager
+    namespace: default
