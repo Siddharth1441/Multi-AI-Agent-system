@@ -1,21 +1,27 @@
 {
-  "name": "router",
+  "name": "auth",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "type": "module",
+  "type": "commonjs",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
     "dev": "nodemon -L server.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "amqplib": "^2.2.0",
+    "cookie-parser": "^1.4.7",
+    "dotenv": "^18.0.5",
     "express": "^5.2.1",
-    "http-proxy-middleware": "^4.2.0",
-    "ioredis": "^6.0.0",
-    "morgan": "^1.12.1"
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.10.3",
+    "morgan": "^1.12.1",
+    "passport": "^0.7.0",
+    "passport-google-oauth20": "^2.0.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.14"

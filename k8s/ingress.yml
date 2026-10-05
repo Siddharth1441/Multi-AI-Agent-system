@@ -51,3 +51,13 @@ spec:
             name: router-service
             port:
               number: 80
+  - host: "*.preview.127.0.0.1.nip.io"
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/api/auth"
+        backend:
+          service:
+            name: auth-service
+            port:
+              number: 80

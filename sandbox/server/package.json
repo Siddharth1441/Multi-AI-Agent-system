@@ -14,9 +14,11 @@
   "license": "ISC",
   "dependencies": {
     "@kubernetes/client-node": "^2.0.0",
-    "dotenv": "^18.0.1",
+    "dotenv": "^18.0.5",
     "express": "^5.2.1",
-    "mongoose": "^9.10.1",
+    "ioredis": "^6.0.0",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.10.4",
     "morgan": "^1.12.1",
     "uuid": "^14.0.2"
   },

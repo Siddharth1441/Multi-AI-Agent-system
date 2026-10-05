@@ -1,8 +1,9 @@
 import express from 'express'
 import {createProxyMiddleware} from 'http-proxy-middleware'
 import morgan from 'morgan'
-const app = express();
+import { refreshTTL } from './config/redis.js';
 
+const app = express();
 app.use(morgan('combined'))
 
 app.get('/api/status/healthz', (req, res) => {
@@ -44,11 +45,12 @@ function getAgentProxy(sandboxId) {
 }   
 
 
-app.use((req,res,next)=>{
+app.use(async(req,res,next)=>{
     const host = req.headers.host ? req.headers.host.split(':')[0] : '';
     const parts = host.split('.');
     const sandboxId = parts[0];
     const type = parts[1];
+    await refreshTTL(sandboxId)
 
     if(type === 'agent'){
         return getAgentProxy(sandboxId)(req,res,next);
