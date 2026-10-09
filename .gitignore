@@ -36,6 +36,7 @@ Thumbs.db
 *kubeconfig*
 *.pem
 *.key
+/k8s/secret.yml
 
 # Python (in case tooling is added later)
 __pycache__/

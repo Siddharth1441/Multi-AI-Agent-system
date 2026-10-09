@@ -16,6 +16,7 @@ spec:
     spec:
       containers:
       - image:  ai-orchestration
+        imagePullPolicy: IfNotPresent
         name:  ai-server
         resources:
           requests:
@@ -29,7 +30,9 @@ spec:
           valueFrom:
             secretKeyRef:
               name: aisecret
-              key: GOOGLE_API_KEY   
+              key: GOOGLE_API_KEY
+        - name: GEMINI_MODEL
+          value: "gemini-3.5-flash-lite"
         livenessProbe:
           httpGet:
             path: /api/status/healthz

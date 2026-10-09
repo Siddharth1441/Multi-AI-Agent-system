@@ -29,6 +29,13 @@ spec:
             name: ai-service
             port:
               number: 80
+      - pathType: Prefix
+        path: "/api/auth"
+        backend:
+          service:
+            name: auth-service
+            port:
+              number: 80
   
   - host: "*.agent.127.0.0.1.nip.io"
     http:

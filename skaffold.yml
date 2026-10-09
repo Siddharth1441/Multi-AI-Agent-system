@@ -50,6 +50,7 @@ build:
   
 manifests:
   rawYaml:
+    - k8s/secret.yml
     - k8s/ai-deployment.yml
     - k8s/auth-deployment.yml
     - k8s/auth-service.yml
@@ -60,5 +61,5 @@ manifests:
     - k8s/rbac.yml
     - k8s/router-service.yml
     - k8s/sandbox-service.yml
-    - k8s/notification-deployment.yml
+    - k8s/notifiaction-deployment.yml
     - k8s/notification-service.yml

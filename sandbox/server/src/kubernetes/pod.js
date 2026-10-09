@@ -53,6 +53,14 @@ export async function createPod(sandboxId) {
           imagePullPolicy: "IfNotPresent",
           name: "agent-container",
           ports: [{ containerPort: 3000, name: "http" }],
+          readinessProbe: {
+            httpGet: {
+              path: "/healthz",
+              port: 3000,
+            },
+            periodSeconds: 2,
+            timeoutSeconds: 1,
+          },
           resources: {
             limits: { cpu: "500m", memory: "1Gi" },
             requests: { cpu: "250m", memory: "500Mi" },

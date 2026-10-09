@@ -18,6 +18,14 @@ app.get('/api/status/readyz', (req, res) => {
 
 const proxies = {}
 const agentProxies = {}
+const sandboxIdPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+
+function getSandboxRoute(hostHeader) {
+    const host = hostHeader ? hostHeader.split(':')[0] : ''
+    const [sandboxId, type] = host.split('.')
+    if (!sandboxIdPattern.test(sandboxId) || !['agent', 'preview'].includes(type)) return null
+    return { sandboxId, type }
+}
 
 function getProxy(sandboxId) {
     const target = `http://sandbox-service-${sandboxId}`;
@@ -26,6 +34,10 @@ function getProxy(sandboxId) {
             target,
             changeOrigin: true,
             ws: true,
+            pathFilter: (pathname, req) => {
+                const route = getSandboxRoute(req.headers.host)
+                return route?.sandboxId === sandboxId && route.type === 'preview'
+            },
         })
     }
 
@@ -38,6 +50,10 @@ function getAgentProxy(sandboxId) {
             target,
             changeOrigin: true,
             ws: true,
+            pathFilter: (pathname, req) => {
+                const route = getSandboxRoute(req.headers.host)
+                return route?.sandboxId === sandboxId && route.type === 'agent'
+            },
         })
     }
 
@@ -46,18 +62,18 @@ function getAgentProxy(sandboxId) {
 
 
 app.use(async(req,res,next)=>{
-    const host = req.headers.host ? req.headers.host.split(':')[0] : '';
-    const parts = host.split('.');
-    const sandboxId = parts[0];
-    const type = parts[1];
-    await refreshTTL(sandboxId)
+    const route = getSandboxRoute(req.headers.host)
+    if (!route) return next()
 
-    if(type === 'agent'){
-        return getAgentProxy(sandboxId)(req,res,next);
-    }else if(type === 'preview'){
-        return getProxy(sandboxId)(req,res,next);
-    }    
-    next();
+    try {
+        await refreshTTL(route.sandboxId)
+    } catch (error) {
+        console.error(`Could not refresh sandbox ${route.sandboxId}:`, error)
+        return res.status(502).json({ error: 'Could not verify sandbox availability' })
+    }
+
+    if (route.type === 'agent') return getAgentProxy(route.sandboxId)(req,res,next)
+    return getProxy(route.sandboxId)(req,res,next)
 })
 
 export default app;
